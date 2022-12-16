@@ -1,0 +1,210 @@
+﻿<style>
+    .address-table {
+        width: 100%;
+        margin: 10px 0;
+        padding: 0 10px;
+        font-size: 14px;
+    }
+
+        .address-table > table > thead {
+            background-color: #24aeb2;
+            color: white;
+        }
+
+        .address-table.hoverable > table > tbody > tr {
+            border-bottom: 1px solid grey;
+            cursor: pointer;
+        }
+
+        .address-table.hoverable > table > thead > tr > th {
+            font-weight: normal !important;
+            padding: 20px !important;
+            text-align: center;
+        }
+
+        .address-table > table > tbody > tr:hover {
+            background-color: #e94f35 !important;
+            color: white;
+        }
+
+    .trSelected {
+        background-color: #e94f35 !important;
+        color: white;
+    }
+
+    .address-table > table > tbody > tr > td {
+        padding: 16px 0;
+        padding-right: 10px;
+        padding-left: 10px;
+        text-align: center;
+    }
+
+    #address-table {
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+        display: table;
+    }
+
+    .table-tr-new-record {
+        background-color: #fee27e !important;
+        color: black !important;
+    }
+
+    .icon-info-circled:before {
+        content: '\e84f';
+    }
+</style>
+<div class="container Yp-col Yp-text-dark-grey" ng-init="showMasterInfo=false">
+    <div class="Yp-col Yp-padding-top Yp-border-bottom">
+        <div class="Yp-col l2 Yp-center-align" style="line-height:40px !important" data-translate="ChoosPageForDesign">
+        </div>
+        <div class="Yp-col l10 Yp-padding-bottom">
+            <select class="Yp-col l8 Yp-select Yp-border Yp-white Yp-transition" ng-model="pageType" ng-options="val as val.Name for val in pageTypeList" ng-change="pageType_change();pageTypeClick=true">
+                <option data-translate="ChooseAnOption"></option>
+            </select>
+            <div class="Yp-col l4 Yp-center-align Yp-padding-top Yp-padding-bottom Yp-animate-zoom" ng-show="pageTypeClick==true">
+                <span class="Yp-cursor-pointer" data-translate="ShowMasterInfo" ng-click="showMasterInfo=!showMasterInfo"></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="Yp-col Yp-animate-opacity tab-container Yp-margin-bottom" ng-if="showMasterInfo==true">
+        <div class="address-table hoverable">
+            <table style="text-align:right;" id="address-table">
+                <thead>
+                    <tr class="right-align">
+                        <th style="border-top-right-radius:5px;" data-translate="Row">
+                        </th>
+                        <th data-translate="PersianTitle">
+                        </th>
+                        <th data-translate="PersianDescription">
+                        </th>
+                        <th data-translate="DesignType">
+                        </th>
+                        <th data-translate="ItemType">
+                        </th>
+                        <th data-translate="Priority">
+                        </th>
+                        <th>
+                        </th>
+                        <th style="border-top-left-radius:5px;">
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="Yp-transition-longer" ng-repeat="cmsMaster in cmsMasterList" ng-class="rowSelected == cmsMaster.ID ? 'trSelected' : ''">
+                        <td>{{$index + 1}}</td>
+                        <td>{{cmsMaster.LocalTitle}}</td>
+                        <td>{{cmsMaster.MasterLocalDescription}}</td>
+                        <td>{{cmsMaster.DesignType}}</td>
+                        <td>{{cmsMaster.ItemType}}</td>
+                        <td>{{cmsMaster.Priority}}</td>
+                        <td>
+                            <div class="Yp-col">
+                                <div class="Yp-col l11 Yp-btn Yp-ripple Yp-red Yp-border Yp-border-white" ng-click="removeCMSMaster_Click(cmsMaster.ID)" data-translate="Delete"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="Yp-col">
+                                <div class="Yp-col l11 Yp-btn Yp-border Yp-border-white Yp-ripple Yp-red Yp-animate-zoom" ng-click="setParentID(cmsMaster.ID)" data-translate="SelectRows" ng-if="rowSelected != cmsMaster.ID"></div>
+                                <div class="Yp-col l11 Yp-btn Yp-border Yp-border-white Yp-ripple Yp-red Yp-animate-zoom" ng-click="deSelectRow()" data-translate="Cancel" ng-if="rowSelected == cmsMaster.ID"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <paging pagesize="{{5}}" allitems="userBasketItemTotalCount"
+                    page-changed="pageChange(pageIndex,pageSize)">
+            </paging>
+        </div>
+    </div>
+    <div class="Yp-col Yp-animate-opacity" ng-if="cmsMasterSelected.length > 0">
+        <div class="address-table hoverable">
+            <table style="text-align:right;" id="address-table">
+                <thead>
+                    <tr class="right-align">
+                        <th style="border-top-right-radius:5px;" data-translate="Row">
+                        </th>
+                        <th data-translate="PersianTitle">
+                        </th>
+                        <th data-translate="PersianDescription">
+                        </th>
+                        <th data-translate="DesignType">
+                        </th>
+                        <th data-translate="ItemType" style="border-top-left-radius:5px;">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="Yp-transition-longer">
+                        <td>1</td>
+                        <td>{{cmsMasterSelected[0].LocalTitle}}</td>
+                        <td>{{cmsMasterSelected[0].MasterLocalDescription}}</td>
+                        <td>{{cmsMasterSelected[0].DesignType}}</td>
+                        <td>{{cmsMasterSelected[0].ItemType}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="Yp-col Yp-center-align Yp-padding-top-24 Yp-padding-bottom" ng-if="showMasterInfo == true && cmsMasterList.length == 0">
+        <span class="Yp-text-main-red Yp-medium Yp-bold Yp-border Yp-border-main-red Yp-round Yp-padding Yp-padding-right-8 Yp-padding-left-8" data-translate="DesignTypeListEmpty"></span>
+    </div>
+    <div class="Yp-col Yp-center-align Yp-padding">
+        <div ng-show="pageType && !showNewRow" class="Yp-btn Yp-ripple Yp-main-green" ng-click="showNewRow=true" data-translate="Add"></div>
+    </div>
+    <div class="Yp-center-align Yp-padding">
+        <div class="Yp-col Yp-float-none Yp-show-inline-block Yp-padding Yp-margin-top Yp-margin-bottom Yp-border Yp-round Yp-animate-zoom" ng-show="pageType && showNewRow">
+            <div class="Yp-col l4">
+                <div class="Yp-col l3 Yp-center-align" style="line-height:40px !important" data-translate="ChooseParent">
+                </div>
+                <div class="Yp-col l9 Yp-padding-bottom">
+                    <select class="Yp-col l11 Yp-select Yp-border Yp-white Yp-transition" ng-model="designParentId" ng-options="val.ID as val.LocalTitle for val in cmsMasterList" ng-change="getParentAndSet(designParentId)">
+                        <option data-translate="ChooseAnOption"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="Yp-col l4">
+                <div class="Yp-col l3 Yp-center-align" style="line-height:40px !important" data-translate="ChoosDesignType">
+                </div>
+                <div class="Yp-col l9 Yp-padding-bottom">
+                    <select class="Yp-col l11 Yp-select Yp-border Yp-white Yp-transition" ng-model="designType" ng-options="val as val.LocalType + ' - ' + val.Code for val in designTypeList" ng-change="designType_Click(designType.ID)">
+                        <option data-translate="ChooseAnOption"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="Yp-col l4">
+                <div class="Yp-col l4 Yp-center-align" style="line-height:40px !important" data-translate="ChoosItemType">
+                </div>
+                <div class="Yp-col l8 Yp-padding-bottom">
+                    <select ng-show="designType" class="Yp-col l6 Yp-select Yp-border Yp-white Yp-transition Yp-animate-zoom" ng-model="itemType" ng-options="val as val.LocalType + ' - ' + val.Code for val in itemTypeList" ng-change="itemType_Click(itemType)">
+                        <option data-translate="ChooseAnOption"></option>
+                    </select>
+                    <div class="Yp-col l6 Yp-center-align" ng-init="showLargeImage=false" ng-click="showLargeImage=!showLargeImage">
+                        <img class="Yp-cursor-pointer" ng-if="itemTypeTemplate.length>5" width="100" ng-src="/apis/Handlers/FileHandler.ashx?type=13&id={{itemTypeTemplate}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="Yp-col Yp-padding-right-8" ng-show="designTypeItem.Description.length > 0 || itemTypeItem.length > 0">
+                <fieldset style="border-radius:3px !important">
+                    <legend data-translate="ToolTip"></legend>
+                    <div class="Yp-col Yp-text-main-red Yp-padding" ng-show="designTypeItem.Description.length > 0">
+                        <span class="icon-info-circled"></span>&nbsp;&nbsp;<span>{{designTypeItem.Description}}</span>
+                    </div>
+                    <div class="Yp-col Yp-text-main-red Yp-padding" ng-show="itemTypeItem.length > 0">
+                        <span class="icon-info-circled"></span>&nbsp;&nbsp;<span>{{itemTypeItem}}</span>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="Yp-col Yp-padding-top-24 Yp-padding-bottom Yp-center-align Yp-animate-zoom" ng-if="showLargeImage == true">
+                <span class="Yp-col Yp-padding-top Yp-padding-bottom Yp-center-align" data-translate="ItemTypePreviewSample"></span>
+                <img width="500" ng-src="/apis/Handlers/FileHandler.ashx?type=13&id={{itemTypeTemplate}}" />
+            </div>
+            <span ng-if="itemType.Code == '07' || itemType.Code == '06'" ng-init="itemType.ItemCount=1;"></span>
+            <cms ng-if="itemType" designtype="designType" designitemtype="itemType" countrylist="countryList" getcountry="loadAllCountries()" save="savecmsMaster(listToSave,Master,CountryList);"></cms>
+        </div>
+    </div>
+</div>
+

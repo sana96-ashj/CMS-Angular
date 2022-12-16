@@ -1,0 +1,152 @@
+﻿<div id="cms" class="Yp-col" ng-init="master.INT_ItemType_DesignTypeID = designitemtype.INT_ItemType_DesignTypeID">
+    <!--<span class="" ng-if="designtype.Code == '06' || designtype.Code == '09'" ng-init="designitemtype.ItemCount=1;"></span>-->
+    <div class="Yp-padding-top-24" data-translate="Row"></div>
+    <div class="Yp-col Yp-padding-tiny Yp-padding-bottom Yp-border Yp-round" style="background-color:#3873bb !important;color:white !important;border-color:#3873bb !important">
+        <div class="Yp-col Yp-margin-top Yp-animate-zoom" ng-show="designitemtype.Type=='SlideShow'">
+            <label class="Yp-col l2 Yp-padding" data-translate="SlideShowCode"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.SlideShowCode" />
+
+            <label class="Yp-col l2 Yp-padding" data-translate="Priority"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.Priority" />
+        </div>
+        <div class="Yp-col Yp-margin-top Yp-animate-zoom" ng-show="designitemtype.Type!='SlideShow'">
+            <label class="Yp-col l2 Yp-padding" data-translate="PersianTitle"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.LocalTitle" />
+            <label class="Yp-col l2 Yp-padding" data-translate="PersianDescription"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.LocalDescription" />
+            <label class="Yp-col l1 Yp-padding" data-translate="Priority"></label>
+            <input class="Yp-col l1 Yp-input Yp-white" type="text" ng-model="master.Priority" />
+            <div class="Yp-col l2 Yp-padding">
+                <input class="Yp-col l6 Yp-input Yp-white" style="width:20px;height:20px;" type="checkbox" ng-model="master.IsActive" />
+                <label class="Yp-col l6" data-translate="Show"></label>
+            </div>
+
+        </div>
+        <div class="Yp-col Yp-margin-top Yp-animate-zoom" ng-show="designitemtype.Type!='SlideShow'">
+            <label class="Yp-col l2 Yp-padding" data-translate="EnglishTitle"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.Title" />
+            <label class="Yp-col l2 Yp-padding" data-translate="EnglishDescription"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.Description" />
+            <div class="Yp-col l2 Yp-padding">
+                <input class="Yp-col l6 Yp-input Yp-white" style="width:20px;height:20px;" type="checkbox" ng-model="master.IsShowAll" />
+                <label class="Yp-col l6" data-translate="ShowAll"></label>
+            </div>
+            <div class="Yp-col l2 Yp-padding">
+                <input id="isGlobal" class="Yp-col l6 Yp-input Yp-white" ng-init="master.IsGlobal=true" ng-click="!master.IsGlobal ? getcountry():''" style="width:20px;height:20px;" type="checkbox" ng-model="master.IsGlobal" />
+                <label for="isGlobal" class="Yp-col l6" data-translate="ShowGlobal"></label>
+            </div>
+        </div>
+        <div class="Yp-margin-top Yp-col">
+            <label class="Yp-col l2 Yp-padding" >
+                پس زمینه
+            </label>
+            <colorpicker ng-model="master.Background"></colorpicker>
+        </div>
+        <div class="Yp-col Yp-margin-top Yp-animate-zoom" ng-show="master.IsShowAll">
+            <label class="Yp-col l2 Yp-padding" data-translate="ShowAllLocalText"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.ShowAllLocalText" />
+            <label class="Yp-col l2 Yp-padding" data-translate="ShowAllText"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.ShowAllText" />
+            <label class="Yp-col l2 Yp-padding" data-translate="ShowAllUrl"></label>
+            <input class="Yp-col l2 Yp-input Yp-white" type="text" ng-model="master.ShowAllUrl" />
+        </div>
+        <div class="Yp-col Yp-white Yp-text-dark-grey Yp-animate-zoom Yp-margin-top-19 Yp-padding Yp-round" ng-show="!master.IsGlobal">
+            <label for="country{{$index}}" class="Yp-col l4" ng-repeat="country in countrylist">
+                <input id="country{{$index}}" class="Yp-col l3 Yp-input Yp-white" style="width:20px;height:20px;" type="checkbox" ng-model="country.Selected" />
+                <span>{{country.LocalName}}</span>
+            </label>
+        </div>
+    </div>
+    <div class="Yp-col Yp-padding-top-24 Yp-padding-bottom" data-translate="RowContent"></div>
+    <div class="Yp-col Yp-border" ng-repeat="item in list"
+         ng-class="{
+         'l6':designitemtype.ItemCount==2,
+         'l4':designitemtype.ItemCount==3 || designitemtype.ItemCount==6 || designitemtype.ItemCount==5,
+         'l3':designitemtype.ItemCount==4 || designitemtype.ItemCount==10
+         }"
+         ng-if="designtype.Code != 09 && designtype.Code != 10 && designtype.Code != 11">
+        <div class="Yp-col Yp-padding-tiny">
+            <div class="Yp-col Yp-padding-top-24">
+                <div class="Yp-col Yp-center-align">
+                    <span class="Yp-light-grey Yp-medium" style="padding: 5px;border-radius: 50%;padding-right: 15px;padding-left: 14px;background-color:#3873bb !important;color:white !important;">{{$index+1}}</span>
+                </div>
+                <label height="300" class="Yp-col Yp-float-none Yp-show-inline-block" for="image{{$index}}">
+                    <span data-translate="Picture"></span>
+                    <img class="Yp-col" height="300" src="/apis/Handlers/FileHandler.ashx?type=13&id={{item.Image}}" alt="" />
+                    <input class="Yp-hide" id="image{{$index}}" index="{{$index}}" name="file" accept="image/*" type="file" onchange="angular.element(this).scope().fileupload(this);" />
+                </label>
+                <div class="Yp-col Yp-padding-top">
+                    <div class="Yp-col Yp-padding-top Yp-padding-bottom Yp-border-bottom">
+                        <label class="Yp-col l2" data-translate="EnglishTitle"></label>
+                        <input class="Yp-col l9 Yp-input Yp-white" type="text" ng-model="item.Title" />
+                    </div>
+                    <div class="Yp-col Yp-padding-top Yp-padding-bottom Yp-border-bottom">
+                        <label class="Yp-col l2" data-translate="PersianTitle"></label>
+                        <input class="Yp-col l9 Yp-input Yp-white" type="text" ng-model="item.LocalTitle" />
+                    </div>
+                    <div class="Yp-col Yp-padding-top Yp-padding-bottom Yp-border-bottom">
+                        <label class="Yp-col l2" data-translate="EnglishDescription"></label>
+                        <input class="Yp-col l9 Yp-input Yp-white" type="text" ng-model="item.Description" />
+                    </div>
+                    <div class="Yp-col Yp-padding-top Yp-padding-bottom Yp-border-bottom">
+                        <label class="Yp-col l2" data-translate="PersianDescription"></label>
+                        <input class="Yp-col l9 Yp-input Yp-white" type="text" ng-model="item.LocalDescription" />
+                    </div>
+                    <div class="Yp-col Yp-padding-top Yp-padding-bottom Yp-border-bottom">
+                        <label class="Yp-col l2" data-translate="Address"></label>
+                        <input class="Yp-col l9 Yp-input Yp-white" type="text" ng-model="item.Url" />
+                    </div>
+                    <div class="Yp-col Yp-padding-top Yp-padding-bottom Yp-border-bottom">
+                        <label class="Yp-col l2" data-translate="Rank"></label>
+                        <select class="Yp-col l9 Yp-select" ng-model="item.Rank" ng-options="rank as rank for rank in ['-',0.5,1,1.5,2,2.5,3,3.5,4,4.5,5]"></select>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="Yp-col Yp-border" ng-repeat="item in list"
+         ng-class="{
+         'l6':designitemtype.ItemCount==2,
+         'l4':designitemtype.ItemCount==3 || designitemtype.ItemCount==6 || designitemtype.ItemCount==5,
+         'l3':designitemtype.ItemCount==4 || designitemtype.ItemCount==10
+         }"
+         ng-if="designtype.Code == '09' || designtype.Code == '10' || designtype.Code == '11'">
+        <div class="Yp-col Yp-padding-tiny">
+
+            <div class="Yp-col Yp-padding">
+                <div class="Yp-col Yp-float-none Yp-center-align Yp-show-inline-block">
+                    ردیف
+                    {{$index+1}}
+                </div>
+                <div class="Yp-col l6 Yp-border Yp-padding Yp-small" ng-repeat="cat in item.CatList">
+                    <div class="Yp-padding-top Yp-padding-bottom">
+                        <div class="Yp-col Yp-center-align">
+                            <div class="Yp-center-align Yp-grey Yp-show-inline-block Yp-circle Yp-text-white" style="width:20px;height:20px;background-color:#3873bb !important">{{$index+1}}</div>
+                        </div>
+                        <label class="Yp-col" ng-if="designitemtype.Code==06" for="image{{$parent.$index}}{{$index}}">
+                            <span data-translate="Picture"></span>
+                            <img class="Yp-col" height="100" src="/apis/Handlers/FileHandler.ashx?type=13&id={{cat.Image}}" alt="" />
+                            <input class="Yp-hide" id="image{{$parent.$index}}{{$index}}" index="{{$index}}" name="file" accept="image/*" type="file" onchange="angular.element(this).scope().fileupload(this);" />
+                        </label>
+                        <div class="Yp-col Yp-border-bottom">
+                            <label class="Yp-col">نام </label>
+                            <input class="Yp-col Yp-input Yp-white" type="text" ng-model="cat.LocalTitle" />
+                        </div>
+                        <div class="Yp-col Yp-border-bottom">
+                            <label class="Yp-col">نام لاتین </label>
+                            <input class="Yp-col Yp-input Yp-white" type="text" ng-model="cat.Title" />
+                        </div>
+                        <div class="Yp-col Yp-border-bottom">
+                            <label class="Yp-col" data-translate="Address"></label>
+                            <input class="Yp-col Yp-input Yp-white" type="text" ng-model="cat.Url" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="Yp-col Yp-center-align">
+        <div class="Yp-btn Yp-col l3 Yp-margin-auto Yp-ripple Yp-left Yp-green" ng-click="save({listToSave:list,Master:master,CountryList:countrylist});" data-translate="Save"></div>
+    </div>
+</div>

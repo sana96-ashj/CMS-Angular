@@ -1,0 +1,342 @@
+﻿<style>
+    .image-container {
+        max-width: 100%;
+        display: block;
+    }
+</style>
+<div ng-repeat="designTypes in list[index].list" class="Yp-col" ng-class="$index !=0 &&designTypes.sample.ItemType!='PictureTextTriple' && designTypes.sample.ItemType!='CirclePictureText' && 'Yp-padding-8'">
+    <div ng-include="designTypes.sample.ItemType" class="Yp-col" ng-if="!designTypes.sample.SlideShowCode"></div>
+    <slide-show code="{{designTypes.sample.SlideShowCode}}" ng-if="designTypes.sample.SlideShowCode"></slide-show>
+</div>
+<script type="text/ng-template" id="HandPicks">
+    <style scoped>
+        .group-ontop {
+            z-index: 10;
+        }
+
+        .handpick-arrow {
+            position: relative;
+        }
+
+            .handpick-arrow.reversed {
+                transform: rotateY(180deg);
+            }
+
+            .handpick-arrow:before, .handpick-arrow:after {
+                content: '';
+                border: 15px solid transparent;
+                position: absolute;
+            }
+
+            .handpick-arrow:before {
+                border-radius: 20px;
+                border-left-color: rgba(83, 82, 82, 0.79);
+                right: -5px;
+            }
+
+            .handpick-arrow:after {
+                border-radius: 20px;
+                border-left-color: #f5f5f1;
+                left: -28px;
+            }
+    </style>
+    <div class="Yp-bigGuy Yp-display-container Yp-margin-bottom" ng-swipe-left="designTypes.selectedIndex = getIndex(designTypes,1);" ng-swipe-right="designTypes.selectedIndex = getIndex(designTypes)" ng-style="calcHeight()">
+        <div class="Yp-display-topleft Yp-col Yp-text-grey" style="z-index:50;height:32px">
+            <div class="Yp-right Yp-xxxlarge Yp-cursor-pointer handpick-arrow" ng-click="designTypes.selectedIndex = getIndex(designTypes,1)"></div>
+            <div class="Yp-left Yp-xxxlarge Yp-cursor-pointer handpick-arrow reversed" ng-click="designTypes.selectedIndex = getIndex(designTypes)"></div>
+        </div>
+        <div class="Yp-col Yp-clear Yp-display-topleft" ng-repeat="group in designTypes.groups" ng-if="group[0].CMSMasterID == designTypes.groupKeys[designTypes.selectedIndex]" ng-class="group[0].CMSMasterID == designTypes.groupKeys[designTypes.selectedIndex] && 'group-ontop'">
+            <div class="Yp-bigGuy">
+                <div class="Yp-col Yp-center Yp-padding-small">
+                    <h3 class="Yp-center Yp-large Yp-bold Yp-margin-0 " desktop="Yp-large" device="Yp-medium" ng-if="group[0].MasterLocalTitle" ng-class="getClass(group[0].CMSMasterID,designTypes)">
+                        {{CurrentLanguage.Culture=='en'? group[0].MasterTitle: group[0].MasterLocalTitle}}
+                    </h3>
+                </div>
+                <div class="Yp-col" device="Yp-center" style="overflow:hidden">
+                    <div ng-style="animationDelay($index)" device="Yp-float-none" ng-repeat-start="item in group" class="Yp-float Yp-padding-small handpick-items" ng-class="getClass(item.CMSMasterID,designTypes,$index)">
+                        <a class="Yp-card-1 Yp-rest Yp-round Yp-col Yp-white Yp-center" ng-href="{{item.Url && (item.Url+'/'+CurrentLanguage.Culture)}}">
+                            <img class="image-container" sizetype="5" guid="item.AttachmentGuid+'.'+item.Extension" alt="{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}" />
+                            <div class="Yp-col Yp-padding-small Yp-border-top Yp-center Yp-display-container" ng-if="item.DetailTitle || item.DetailDecsription">
+                                <div class="Yp-padding-small Yp-small-medium  Yp-ellipsis" ng-if="item.DetailTitle">{{CurrentLanguage.Culture=='en'? item.DetailTitle : item.DetailLocalTitle}}</div>
+                                <span class="Yp-small">{{CurrentLanguage.Culture=='en'? item.DetailDecsription :item.LocalDetailDecsription}}</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div ng-repeat-end class="Yp-inhandheld Yp-clear" ng-show="$index % 3 == 2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="Picture">
+    <div class="Yp-col" ng-repeat="group in designTypes.groups">
+        <h4 class="Yp-center Yp-padding" ng-if="group[0].MasterLocalTitle">{{CurrentLanguage.Culture=='en'? group[0].MasterTitle:group[0].MasterLocalTitle}}</h4>
+        <div class="Yp-col" ng-style="{'background-color':group[0].Background}">
+            <div class="Yp-bigGuy Yp-clear">
+                <a target="{{item.Url.indexOf('/view/') >=0 ? '_self':'_blank'}}" ng-href="{{item.Url!=null? (item.Url + (item.Url.indexOf('/view/') >=0 ? ('/' + $parent.$parent.CurrentLanguage.Culture.toString().toUpperCase()) : '')) : ''}}" ng-repeat="item in group" class="Yp-float Yp-padding-small " ng-style="{'width':'Calc(100% / '+item.ItemCount+')'}" ng-class="item.DesignType">
+                    <img width="100%" class="image-container" sizetype="5" guid="item.AttachmentGuid+'.'+item.Extension" alt="" />
+                </a>
+                <a ng-href="{{group[0].ShowAllUrl && (group[0].ShowAllUrl+'/'+CurrentLanguage.Culture)}}" ng-show="group[0].ShowAllUrl" class="Yp-text-decoration-none Yp-text-blue Yp-col Yp-center Yp-padding">
+                    <span data-translate="ShowMore"></span>
+                    <span class="Yp-bold Yp-xlarge" style="line-height:20px;font-family: ubuntuLightFont !important;vertical-align: middle;">&#8250;</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="PictureAndBottomText">
+    <div class="Yp-col" ng-style="{'background-color':group[0].Background}" ng-repeat="group in designTypes.groups">
+        <div class="Yp-bigGuy Yp-center Yp-padding-small">
+            <div class="Yp-col Yp-center">
+                <h4 class="Yp-medium Yp-center Yp-padding " device="Yp-justify-center Yp-justify-center">{{CurrentLanguage.Culture=='en'? group[0].MasterTitle:group[0].MasterLocalTitle}}</h4>
+                <!--<h5 class="Yp-padding Yp-inhandheld Yp-justify-center" ng-if="group[0].MasterLocalTitle">{{CurrentLanguage.Culture=='en'? group[0].MasterTitle:group[0].MasterLocalTitle}}</h5>-->
+                <!--<a ng-href="{{item.ShowAllUrl && (item.ShowAllUrl+'/'+CurrentLanguage.Culture)}}" ng-if="item.ShowAllUrl" class="Yp-desktop Yp-text-blue Yp-padding" data-translate="ShowMore"></a>-->
+            </div>
+            <div class="Yp-col">
+                <div ng-repeat="item in group" desktop="Yp-padding-small" device="Yp-padding-tiny" class="Yp-show-inline-block  cms-common-item" ng-style="{'width':'Calc(99.8% / '+item.ItemCount+')'}" ng-class="item.DesignType + ' '+(group.length%2 && 'device-block')">
+                    <a ng-href="{{item.Url && (item.Url+'/'+CurrentLanguage.Culture) }}" class="Yp-rest Yp-center Yp-col Yp-card-1 Yp-round Yp-white">
+                        <img sizetype="5" guid="item.AttachmentGuid+'.'+item.Extension" class="image-container " style="border-color:transparent !important" alt="{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}" />
+                        <!--<div class="Yp-col image-container Yp-border-bottom" ng-style="{'background-image':'url(/apis/Handlers/FileHandler.ashx?type=13&id='+item.AttachmentGuid+')'}"></div>-->
+                        <div class="Yp-col Yp-center Yp-border-top">
+                            <h4 class="Yp-margin-0 Yp-small-medium Yp-ellipsis Yp-padding-small "> {{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}</h4>
+                            <p class="Yp-margin-0 Yp-small Yp-padding-small" ng-if="item.DetailDecsription">{{CurrentLanguage.Culture=='en' ? item.DetailDecsription : item.LocalDetailDecsription}}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <a ng-href="/{{group[0].ShowAllUrl && (group[0].ShowAllUrl+'/'+CurrentLanguage.Culture)}}" ng-show="group[0].ShowAllUrl" class="Yp-text-decoration-none Yp-text-blue Yp-col Yp-center Yp-padding">
+                <span data-translate="ShowMore"></span>
+                <span class="Yp-bold Yp-xlarge" style="line-height:20px;font-family: ubuntuLightFont !important;vertical-align: middle;">&#8250;</span>
+            </a>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="PictureAndTextInRow">
+    <style>
+        @media screen and (min-width:1252px) {
+            .success-story-exp .Yp-col.Yp-bigGuy, .success-story-exp .Yp-bigGuy {
+                width: 800px !important;
+                float: none !important;
+                margin: auto;
+            }
+
+            .how-to-shine .Yp-bigGuy {
+                width: 1070px !important;
+                float: none !important;
+                margin: auto;
+            }
+        }
+
+        .success-story-exp .calc-item-exp {
+            width: 50%;
+        }
+
+        .success-story-exp .dicription-exp {
+            font-size: 17px !important;
+        }
+
+        .success-story-exp .handler-img-1 {
+            float: left !important;
+            border-right: 1px solid rgba(204, 204, 204, 0.5) !important;
+            border-left: none !important;
+        }
+
+        .success-story-exp .handler-img-0 {
+            float: right !important;
+            border-left: 1px solid rgba(204, 204, 204, 0.5) !important;
+            border-right: none !important;
+        }
+
+
+        .success-story-exp .mainContainer-txtInRow {
+            margin-top: 25px;
+        }
+
+        /*@media only screen and (min-width:993px) {
+            .how-to-shine .smaller-exp-txt {
+                width: calc(700%/12) !important;
+            }
+
+            .how-to-shine .smaller-exp-img {
+                width: calc(500%/12) !important;
+            }
+        }*/
+    </style>
+    <div class="Yp-col mainContainer-txtInRow" ng-style="{'background-color':group[0].Background}" ng-repeat="group in designTypes.groups">
+        <div class="Yp-bigGuy">
+            <h4 class="Yp-medium Yp-center Yp-padding" ng-if="group[0].MasterLocalTitle">{{CurrentLanguage.Culture=='en'? group[0].MasterTitle:group[0].MasterLocalTitle}}</h4>
+            <div ng-repeat="item in group" ng-class="'Yp-float Yp-padding-small calc-item-exp'" ng-style="!isMobile() && {'width':'Calc(100% / '+item.ItemCount+')'}">
+                <a ng-href="{{item.Url && (item.Url+'/'+CurrentLanguage.Culture)}}" class="Yp-col Yp-card-1 Yp-round Yp-rest Yp-white" ng-class="item.DesignType">
+                    <div class="Yp-col Yp-display-container">
+                        <div class="Yp-col l6 s6 Yp-align-middle Yp-show-inline-block smaller-exp-img Yp-center" desktop="Yp-float-none" ng-class="getPTRClass(CurrentLanguage.Dir == 'rtl',$index)" style="vertical-align:middle">
+                            <img sizetype="5" guid="item.AttachmentGuid+'.'+item.Extension" class="image-container" alt="{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}" />
+                        </div>
+                        <div class="Yp-col l6 s6 Yp-show-inline-block smaller-exp-txt Yp-align-middle Yp-padding-small" desktop="Yp-float-none" ng-class="isMobile() && ($index % 2 ? 'Yp-float-reverse':'Yp-float')" style="vertical-align:middle">
+                            <p class="Yp-small dicription-exp Yp-text-grey" ng-if="item.DetailDecsription">{{CurrentLanguage.Culture=='en' ? item.DetailDecsription : item.LocalDetailDecsription}}</p>
+                            <span class="Yp-ellipsis Yp-margin-0 Yp-col" device="Yp-absolute" ng-style="isMobile() &&{'top':'calc(50% - 11px)'}">{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <a ng-href="/{{group[0].ShowAllUrl && (group[0].ShowAllUrl+'/'+CurrentLanguage.Culture)}}" ng-show="group[0].ShowAllUrl" class="Yp-text-decoration-none Yp-text-blue Yp-col Yp-center Yp-padding">
+                <span data-translate="ShowMore"></span>
+                <span class="Yp-bold Yp-xlarge" style="line-height:20px;font-family: ubuntuLightFont !important;vertical-align: middle;">&#8250;</span>
+            </a>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="PictureAndTopText">
+    <div class="Yp-col" ng-style="{'background-color':group[0].Background}" ng-repeat="group in designTypes.groups">
+        <div class="Yp-bigGuy">
+            <h4 class="Yp-center Yp-padding">{{CurrentLanguage.Culture=='en'?group[0].MasterTitle :group[0].MasterLocalTitle}}</h4>
+            <div ng-repeat="item in group" class="Yp-float Yp-padding-small" ng-style="{'width':'Calc(100% / '+item.ItemCount+')'}" ng-class="item.DesignType">
+                <a ng-href="{{item.Url && (item.Url+'/'+CurrentLanguage.Culture) }}" class="Yp-border Yp-col Yp-center Yp-round">
+                    <div class="Yp-col Yp-center Yp-border-bottom">
+                        <h4 class="Yp-margin-0 Yp-medium Yp-padding-tiny Yp-center" ng-class="!item.DetailDecsription && 'Yp-center'"> {{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}</h4>
+                        <p class="Yp-margin-0 Yp-small Yp-padding-small Yp-center" ng-if="item.DetailDecsription">{{CurrentLanguage.Culture=='en' ? item.DetailDecsription : item.LocalDetailDecsription}}</p>
+                    </div>
+                    <img width="100%" class="image-container" sizetype="5" guid="item.AttachmentGuid+'.'+item.Extension" alt="{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}" />
+                </a>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="SupplierSuccessStory">
+    <style>
+        .supplier-image {
+            width: 80px;
+            height: 80px !important;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+    <div class="Yp-bigGuy sss">
+        <div class="Yp-col" ng-repeat="group in designTypes.groups">
+            <h4 class="Yp-center Yp-padding">{{CurrentLanguage.Culture=='en'? group[0].MasterTitle:group[0].MasterLocalTitle}}</h4>
+            <a ng-repeat="item in group" class="Yp-float Yp-margin-top Yp-padding-small " ng-style="{'width':'Calc(100% / '+item.ItemCount+')'}">
+                <div class="Yp-col Yp-light-grey Yp-center">
+                    <div class="supplier-image  Yp-margin-auto Yp-border-light-grey Yp-border-3 Yp-border" style="position:relative;top:-40px;" ng-style="{'background-image':'url(/apis/Handlers/FileHandler.ashx?type=13&id='+item.AttachmentGuid+')'}">
+                    </div>
+                    <div class="Yp-justify Yp-padding" style="text-align-last:center">
+                        <h3>{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}</h3>
+                        <p>{{CurrentLanguage.Culture=='en' ? item.DetailDecsription : item.LocalDetailDecsription}}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="Text">
+    <style>
+        .arrow-empty {
+            position: relative;
+        }
+
+            .arrow-empty:after {
+                width: 8px;
+                content: ' ';
+                height: 8px;
+                display: inline-block;
+                border: 5px solid transparent;
+                border-left: 3px solid rgba(83, 82, 82, 0.79);
+                border-top: 3px solid rgba(83, 82, 82, 0.79);
+                border-radius: 6px;
+                transform: rotate(-45deg);
+                transition-duration: 0.2s;
+            }
+
+        .arrow-empty-open:after {
+            transform: rotate(-135deg);
+        }
+
+        .col-list {
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .col-list-open {
+            max-height: 500px;
+        }
+    </style>
+    <div class="Yp-col" ng-init="isColOpen=false" ng-style="{'background-color':designTypes.sample.Background}">
+        <div class="Yp-bigGuy cms-text">
+            <div class="Yp-float cms-text-list" ng-repeat="group in designTypes.groups" ng-style="{'width':'Calc(100% / '+designTypes.sample.ItemCount+')'}">
+                <h3 class="Yp-padding-small Yp-border-bottom" ng-if="group[0].MasterLocalTitle" ng-click="$parent.isColOpen=!$parent.isColOpen">
+                    <span class="Yp-padding-small arrow-empty" ng-class="isColOpen && 'arrow-empty-open'"></span>
+                    {{$parent.CurrentLanguage.Culture=='en' ? group[0].MasterTitle : group[0].MasterLocalTitle}}
+                </h3>
+                <div class="Yp-col col-list Yp-transition" ng-class="isColOpen&&'col-list-open'">
+                    <div ng-repeat="item in group" class="Yp-padding-small Yp-col" ng-show="item.DetailLocalTitle" ng-class="item.DesignType">
+                        <a class="Yp-text-blue Yp-margin-0 Yp-padding-small Yp-text-decoration-none" ng-href="{{item.Url && (item.Url+'/'+CurrentLanguage.Culture)}}">{{$parent.CurrentLanguage.Culture=='en' ? item.DetailTitle: item.DetailLocalTitle}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="PictureTextTriple">
+    <div class="Yp-col Yp-padding-small">
+        <div class="Yp-bigGuy">
+            <div class="Yp-col l4" ng-repeat="item in designTypes.groups[designTypes.groupKeys[0]]">
+                <div class="Yp-col Yp-center">
+                    <img sizetype="5" guid="item.AttachmentGuid+'.'+item.Extension" alt="{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}" class="Yp-show-inline-block Yp-align-top" style="max-height:80px;" />
+                    <div class="Yp-show-inline-block Yp-align-top Yp-padding-small">
+                        <!--<h4>{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}} &nbsp; </h4>-->
+                        <h4 class="" style="margin-top:13px">{{CurrentLanguage.Culture=='en' ? item.DetailDecsription : item.LocalDetailDecsription}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="CirclePictureText">
+    <div class="Yp-col Yp-padding-small ">
+        <div class="Yp-bigGuy">
+            <h4 class="Yp-center Yp-padding " ng-show="designTypes.groups[designTypes.groupKeys[0]][0].MasterTitle&&designTypes.groups[designTypes.groupKeys[0]][0].MasterLocalTitle" device="Yp-justify-center Yp-justify-center">{{CurrentLanguage.Culture=='en'? designTypes.groups[designTypes.groupKeys[0]][0].MasterTitle:designTypes.groups[designTypes.groupKeys[0]][0].MasterLocalTitle}}</h4>
+            <div class="Yp-float Yp-padding-small Yp-center" ng-style="{'width':'Calc(100% / ' +designTypes.groups[designTypes.groupKeys[0]].length +' )'}" ng-repeat="item in designTypes.groups[designTypes.groupKeys[0]]">
+                <a ng-href="{{item.Url && (item.Url+'/'+CurrentLanguage.Culture) }}" class="Yp-col Yp-center ">
+                    <img class="image-container Yp-card-2 Yp-circle" sizetype="5" guid="item.AttachmentGuid+'.'+item.Extension" alt="{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}" />
+                    <div class="Yp-center Yp-center-all Yp-col">
+                        <h4>{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}</h4>
+                        <p class="Yp-small-medium">{{CurrentLanguage.Culture=='en' ? item.DetailDecsription : item.LocalDetailDecsription}}</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+</script>
+<script type="text/ng-template" id="BoxText">
+    <div class="Yp-col Yp-padding-small ">
+        <div class="Yp-bigGuy">
+            <h4 class="Yp-center Yp-padding " device="Yp-justify-center Yp-justify-center">{{CurrentLanguage.Culture=='en'? designTypes.groups[designTypes.groupKeys[0]][0].MasterTitle:designTypes.groups[designTypes.groupKeys[0]][0].MasterLocalTitle}}</h4>
+            <div class="Yp-float Yp-padding-small Yp-center" ng-style="{'width':'Calc(100% / ' +designTypes.groups[designTypes.groupKeys[0]].length +' )'}" ng-repeat="item in designTypes.groups[designTypes.groupKeys[0]]">
+                <a ng-href="{{item.Url && (item.Url+'/'+CurrentLanguage.Culture) }}" class="Yp-col Yp-text-decoration-none Yp-round Yp-padding Yp-center Yp-main-green Yp-card-2">
+                    <span class="Yp-show-block Yp-center">{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}</span>
+                </a>
+            </div>
+            <a ng-href="/{{designTypes.groups[designTypes.groupKeys[0]][0].ShowAllUrl && (designTypes.groups[designTypes.groupKeys[0]][0].ShowAllUrl+'/'+CurrentLanguage.Culture)}}" ng-show="designTypes.groups[designTypes.groupKeys[0]][0].ShowAllUrl" class="Yp-text-decoration-none Yp-text-blue Yp-col Yp-center Yp-padding">
+                <span data-translate="ShowMore"></span>
+                <span class="Yp-bold Yp-xlarge" style="line-height:20px;font-family: ubuntuLightFont !important;vertical-align: middle;">&#8250;</span>
+            </a>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="SimpleText">
+    <div class="Yp-col Yp-padding-small">
+        <div class="Yp-bigGuy">
+            <div class="Yp-col" ng-repeat="item in designTypes.groups[designTypes.groupKeys[0]]">
+                <div class=" Yp-col Yp-padding">
+                    <h4>{{CurrentLanguage.Culture=='en' ? item.DetailTitle : item.DetailLocalTitle}}</h4>
+                    <p class="Yp-small-medium">{{CurrentLanguage.Culture=='en' ? item.DetailDecsription : item.LocalDetailDecsription}}</p>
+                </div>
+            </div>
+            <a ng-href="/{{designTypes.groups[designTypes.groupKeys[0]][0].ShowAllUrl && (designTypes.groups[designTypes.groupKeys[0]][0].ShowAllUrl+'/'+CurrentLanguage.Culture)}}" ng-show="designTypes.groups[designTypes.groupKeys[0]][0].ShowAllUrl" class="Yp-text-decoration-none Yp-text-blue Yp-col Yp-center Yp-padding">
+                <span data-translate="ShowMore"></span>
+                <span class="Yp-bold Yp-xlarge" style="line-height:20px;font-family: ubuntuLightFont !important;vertical-align: middle;">&#8250;</span>
+            </a>
+        </div>
+    </div>
+</script>
+

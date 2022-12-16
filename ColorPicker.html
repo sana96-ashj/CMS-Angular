@@ -1,0 +1,131 @@
+﻿
+<style>
+    input[type=range] {
+        -webkit-appearance: none;
+        width: 300px;
+        border-radius: 3px;
+    }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 300px;
+            height: 5px;
+            background: #ddd;
+            border: none;
+            border-radius: 3px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            border: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #24aeb2;
+            margin-top: -6px;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+            input[type=range]:focus::-webkit-slider-runnable-track {
+                background: #ccc;
+            }
+
+
+
+    .colorpicker {
+        font-size: 12px;
+        position: absolute;
+        width: 460px;
+        height: 318px;
+        bottom:100%;
+    }
+
+    .cpicker {
+        cursor: crosshair;
+        margin: 10px;
+        border: 0;
+        width: 300px;
+        height: 300px;
+        left: 0;
+        z-index: 2;
+    }
+
+    .opt {
+        width: 11px;
+        height: 16px;
+        z-index: 10;
+        position: absolute;
+        pointer-events: none;
+        font-weight: bold;
+    }
+
+    .preview {
+        border-right: 1px solid #ddd;
+        cursor: pointer;
+        height: 40px;
+        width: 40px;
+    }
+
+    .transParent {
+        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAAGwAQMAAADygKJpAAAABlBMVEXMzMz////TjRV2AAAAi0lEQVR4Xu3TsQkAAAgDwey/tO5gI4HD+gsDl8zlnjNZ52uytudkvPEm403GG2+G5E3GG2824U3Gm4w33mS8yXjjzZC8yXiT8cabjDcZb7yZkjcZb7xZhDcZbzLeeJPxJuONN1PyJuNNxhtvMt5kvPFmSN5kvPFmE95kvMl4403Gm4w33gzJm4w32QLpZWUU9lsd5QAAAABJRU5ErkJggg==');
+        width: 40px;
+    }
+
+    .params {
+        float: right;
+        margin: 10px;
+        width: 118px;
+    }
+
+        .params > div {
+            margin-bottom: 5px;
+            overflow: hidden;
+            padding: 5px;
+        }
+
+        .params label {
+            float: left;
+        }
+
+        .params > div input {
+            float: right;
+            font-size: 12px;
+            margin-left: 6px;
+            text-align: center;
+            width: 75px !important;
+            line-height: 10px !important;
+            min-height: 18px !important;
+            padding: 5px;
+        }
+
+    color-txt {
+        min-height: 40px;
+        line-height: 40px;
+        padding: 0 10px;
+        border-radius: 4px;
+    }
+</style>
+<div class="Yp-border Yp-float Yp-round Yp-display-container color-picker-ctx" style="height:42px">
+    <input type="text" class="Yp-input Yp-white Yp-direction-ltr Yp-show-inline-block Yp-center Yp-align-top color-txt" style="width:180px;border:none !important" ng-model="ngModel" />
+    <div class="transParent Yp-show-inline-block" style="border-top-left-radius:3px;border-bottom-left-radius:3px">
+        <div class="preview" style="border-top-left-radius:3px;border-bottom-left-radius:3px" ng-click="readColor = true;colorFlag=!colorFlag" ng-style="{'background-color':ngModel}"></div>
+    </div>
+    <div class="colorpicker Yp-white Yp-round Yp-border Yp-card-4" ng-show="colorFlag" style="z-index:200">
+        <div class="Yp-black cpicker Yp-circle Yp-absolute"></div>
+        <canvas id="picker" class="cpicker Yp-absolute" ng-click="readColor = !readColor" width="300" height="300" ng-mousemove="PickColor($event)" var="1" style="cursor:none;opacity:{{hue/255}}"></canvas>
+        <div class="opt" onmouseover="return false" ng-style="{'left':lX+5,'top':lY}">Օ</div>
+        <div class="opt" onmouseover="return false" ng-show="!readColor" ng-style="{'left':_X+5,'top':_Y}">X</div>
+        <div class="params">
+            <div>R<input class="Yp-input Yp-white" type="text" ng-model="_red" /></div>
+            <div>G<input class="Yp-input Yp-white" type="text" ng-model="_green" /></div>
+            <div>B<input class="Yp-input Yp-white" type="text" ng-model="_blue" /></div>
+            <div>A<input class=" Yp-white" type="range" value="100" min="0" max="100" ng-model="alpha" /></div>
+            <div>H<input class=" Yp-white" type="range" value="255" min="0" max="255" ng-model="hue" /></div>
+            <div>RGB<input class="Yp-input Yp-white Yp-direction-ltr" style="width:100% !important" type="text" ng-model="rgba" /></div>
+            <!--<div>HEX<input class="Yp-input Yp-white Yp-direction-ltr" style="width:100% !important" type="text" value="{{rgbToHex(_red,_green,_blue)}}" /></div>-->
+        </div>
+    </div>
+</div>
+

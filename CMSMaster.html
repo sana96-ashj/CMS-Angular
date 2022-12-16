@@ -1,0 +1,260 @@
+﻿<style>
+    .no-item {
+        height: 200px;
+        position: relative;
+    }
+
+        .no-item div {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+    @media only screen and (min-width:993px) {
+        .Yp-col.l5 {
+            width: Calc(500% / 12 - 20px) !important;
+        }
+
+        .Yp-col.l4 {
+            width: Calc(400% / 12 - 20px) !important;
+        }
+
+        .Yp-col.l7 {
+            width: Calc(700% / 12 - 20px) !important;
+        }
+
+        .Yp-col.l8 {
+            width: Calc(800% / 12 - 20px) !important;
+        }
+    }
+
+    .cmsMaster .deleteBasketItemIcon {
+        padding: 5px !important;
+    }
+
+    .label--checkbox {
+        position: relative;
+        margin: .5rem;
+        font-family: Arial, sans-serif;
+        line-height: 135%;
+        cursor: pointer;
+    }
+
+    .checkbox {
+        position: relative;
+        top: -0.375rem;
+        margin: 0 1rem 0 0;
+        cursor: pointer;
+    }
+
+        .checkbox:before {
+            -webkit-transition: all 0.3s ease-in-out;
+            -moz-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+            content: "";
+            position: absolute;
+            left: 0;
+            z-index: 1;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #f2f2f2;
+        }
+
+        .checkbox:checked:before {
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            height: .5rem;
+            border-color: #009688;
+            border-top-style: none;
+            border-right-style: none;
+        }
+
+        .checkbox:after {
+            content: "";
+            position: absolute;
+            top: -0.125rem;
+            left: 0;
+            width: 1.1rem;
+            height: 1.1rem;
+            background: #fff;
+            cursor: pointer;
+        }
+
+    .content {
+        -webkit-animation-duration: 0.4s;
+        animation-duration: 0.4s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        -webkit-animation-name: slideUp;
+        animation-name: slideUp;
+        -webkit-animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @-webkit-keyframes slideUp {
+        0% {
+            -webkit-transform: translateY(6.25rem);
+            transform: translateY(6.25rem);
+        }
+
+        100% {
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideUp {
+        0% {
+            -webkit-transform: translateY(6.25rem);
+            transform: translateY(6.25rem);
+        }
+
+        100% {
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+    }
+    [class^="cms-slide-arrow"], [class*="cms-slide-arrow-"] {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 10px;
+        height: 80px;
+        text-align: center;
+        display: inline-flex;
+        padding: 21px !important;
+    }
+
+    .cms-slide-arrow-left {
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
+    }
+
+    .cms-slide-arrow-right {
+        background: linear-gradient(to right, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0));
+    }
+
+    .cms-slide-arrow-left:before {
+        top: 50%;
+        transform: translateY(-50%);
+        position: relative;
+        content: '';
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid #24aeb2;
+    }
+
+    .cms-slide-arrow-right:before {
+        top: 50%;
+        transform: translateY(-50%);
+        position: relative;
+        content: '';
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid #24aeb2;
+    }
+
+    .cms-slide {
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .cms-parent:hover {
+        border-width: 3px !important;
+    }
+</style>
+
+<div class="Yp-col Yp-animate-opacity" >
+    <div class="Yp-white Yp-display-bottomleft  Yp-padding" style="position:fixed !important">
+        <input type="checkbox" ng-model="showSettings" />
+    </div>
+    <div class="Yp-col cms">
+       
+        <div class="Yp-col row"
+             index="{{$index}}"
+             ng-init="row.i=$index"
+             ng-style="{'background':row.color}"
+             ng-repeat="row in cms.Rows">
+            <div ng-class="!row.isFull&&'Yp-bigGuy'">
+                <div class="Yp-float" ng-style="{'width':cl.width != '0'?cl.width:('calc('+(100-row.cws)+'% / '+(row.cls.length-row.cwc)+')')}" ng-init="cl.i=$index" ng-repeat="cl in row.cls">
+                    <span class="Yp-col Yp-padding" ng-show="cl.Title.fa" ng-style="{'font-size':cl.titleSize}" ng-class="{'Yp-center':cl.centerTitle,'Yp-bold':cl.boldTitle}">{{cl.Title.fa}}</span>
+                    <div class="Yp-col" ng-repeat="srow in cl.rows" ng-init="srow.i=$index">
+                        <span class="Yp-col Yp-padding" ng-show="srow.Title.fa" ng-style="{'font-size':srow.titleSize}" ng-class="{'Yp-center':srow.centerTitle,'Yp-bold':srow.boldTitle}">{{srow.Title.fa}}</span>
+                        <div class="Yp-col no-item" ng-show="!srow.items.length" id="i{{srow.i}}{{cl.i}}{{row.i}}" ng-init="initItemDrag(srow.i,cl.i,row.i)">
+                            <div class="Yp-light-grey Yp-padding Yp-card-2 Yp-round">
+                                <span class="icon-info-circled"></span>
+                                There is no item
+                            </div>
+                        </div>
+                        <div class="Yp-col Yp-display-container">
+                            <div class="Yp-bold cms-slide-arrow-left" ng-show="srow.canSlide" style="left:0;">
+                            </div>
+                            <div class="Yp-col" ng-class="srow.canSlide&&'cms-slide'" ng-include="srow.itemType">
+                            </div>
+                            <div class="Yp-bold cms-slide-arrow-right" ng-show="srow.canSlide" style="right:0;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="Text">
+    <div class="Yp-col Yp-card-2 Yp-padding Yp-round Yp-light-grey Yp-justify Yp-border">
+        <span class="icon-info-circled"></span>
+        {{cl.Value}}
+    </div>
+</script>
+<script type="text/ng-template" id="Item">
+    <div class=" Yp-padding-small Yp-align-top" ng-class="srow.canSlide? 'Yp-show-inline-block':'Yp-float'"
+         ng-style="{'width': srow.canSlide ? ('calc(100% / ' +srow.itemSize+')') : ('calc(100% / '+srow.items.length+')')}" ng-repeat="item in srow.items"
+         id="i{{srow.i}}{{cl.i}}{{row.i}}{{item.i}}"
+         ng-init="item.i=$index;">
+        <div class="Yp-col  Yp-card-2 Yp-hover-shadow Yp-round Yp-white">
+            <div class="Yp-col Yp-center " ng-class="item.Title.fa && 'Yp-border-bottom'">
+                <img ng-show="item.Guid" class="Yp-show-block" style="max-height:100%;max-width:100%" sizetype="5" guid="item.Guid+'.'+item.extention" alt="{{item.Title.fa}}" />
+                <img ng-show="!item.Guid" class="Yp-show-block" style="max-height:100%;max-width:100%" src="Content/Images/Elements/no-image.jpg" draggable="false" />
+            </div>
+            <span class="Yp-col Yp-padding-small" ng-show="item.Title.fa">{{item.Title.fa}}</span>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="TextAndPicInRow">
+    <div class=" Yp-padding-small Yp-align-top" ng-class="srow.canSlide? 'Yp-show-inline-block':'Yp-float'"
+         draggable="true"
+         ng-style="{'width': srow.canSlide ? ('calc(100% / ' +srow.itemSize+')') : ('calc(100% / '+srow.items.length+')')}" ng-repeat="item in srow.items"
+         id="i{{srow.i}}{{cl.i}}{{row.i}}{{item.i}}"
+         ng-init="item.i=$index;">
+        <div class="Yp-col  Yp-card-2 Yp-hover-shadow Yp-round Yp-white">
+            <div class="Yp-col s6 Yp-center " ng-class="item.Title.fa && 'Yp-border-bottom'">
+                <img ng-show="item.Guid" class="Yp-show-block" style="max-height:100%;max-width:100%" sizetype="5" guid="item.Guid+'.'+item.extention" alt="{{item.Title.fa}}" />
+                <img ng-show="!item.Guid" class="Yp-show-block" style="max-height:100%;max-width:100%" src="Content/Images/Elements/no-image.jpg" draggable="false" />
+            </div>
+            <span class="Yp-col s6 Yp-padding-small" ng-show="item.Title.fa">{{item.Title.fa}}</span>
+            <p class="Yp-col s6 Yp-padding-small" ng-show="item.Description.fa">{{item.Description.fa}}</p>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="Circle">
+    <div class=" Yp-padding-small Yp-align-top" ng-class="srow.canSlide? 'Yp-show-inline-block':'Yp-float'"
+         draggable="true"
+         ng-style="{'width': srow.canSlide ? ('calc(100% / ' +srow.itemSize+')') : ('calc(100% / '+srow.items.length+')')}" ng-repeat="item in srow.items"
+         id="i{{srow.i}}{{cl.i}}{{row.i}}{{item.i}}"
+         ng-init="item.i=$index;">
+        <div class="Yp-col">
+            <div class="Yp-col Yp-center">
+                <img ng-show="item.Guid" class="Yp-circle Yp-card-2 Yp-show-block" style="max-height:100%;max-width:100%" sizetype="5" guid="item.Guid+'.'+item.extention" alt="{{item.Title.fa}}" />
+                <img ng-show="!item.Guid" class="Yp-circle Yp-card-2 Yp-show-block" style="max-height:100%;max-width:100%" src="Content/Images/Elements/no-image.jpg" draggable="false" />
+            </div>
+            <span class="Yp-col Yp-center Yp-margin-top Yp-padding-small" ng-show="item.Title.fa">{{item.Title.fa}}</span>
+        </div>
+    </div>
+</script>
